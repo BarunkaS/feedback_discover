@@ -5,7 +5,7 @@ from flask import g
 
 
 def get_db():
-    if not hasttr(g, "mysql"):
+    if not hasattr(g, "mysql"):
         env = os.environ["JAWSDB_MARIA_URL"]
         cred = urlparse(env)
         db = MySQLdb.connect(cred.hostname, cred.username, cred.password, cred.path[1:])
