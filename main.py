@@ -18,6 +18,6 @@ DiscoverApp.register_blueprint(names_bp.blueprint)
 DiscoverApp.register_blueprint(general_bp.blueprint)
 
 @DiscoverApp.teardown_appcontext
-def close_db():
+def close_db(error):
     if hasattr(g, "mysql"):
         g.mysql.close()
