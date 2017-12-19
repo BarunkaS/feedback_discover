@@ -1,7 +1,7 @@
 from urllib.parse import urlparse
 
 import MySQLdb
-from Flask import g
+from flask import g
 
 
 def get_db():
