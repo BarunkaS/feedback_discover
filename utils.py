@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 
 import MySQLdb
 from flask import g
-
+import os
 
 def get_db():
     if not hasattr(g, "mysql"):
