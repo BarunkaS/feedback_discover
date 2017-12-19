@@ -1,4 +1,4 @@
-from urlllib.parse import urlparse
+from urllib.parse import urlparse
 
 import MySQLdb
 from Flask import g
