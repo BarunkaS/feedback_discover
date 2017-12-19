@@ -1,7 +1,6 @@
 
 from flask import Flask
 from flask import current_app as app
-import MySQLdb
 import numpy 
 
 # Z flasku naimportuje spoustu různých funkcí, které budeme potřebovat

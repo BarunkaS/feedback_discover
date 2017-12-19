@@ -2,13 +2,10 @@ from flask import Flask
 from flask import current_app as app
 from flask import Blueprint, request, url_for, render_template, redirect
 from jinja2 import exceptions
-from io import BytesIO
-import base64
-import os
 
 import numpy 
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 from utils import get_db 
 
@@ -72,7 +69,7 @@ def show_general():
     for chartEntry in chartEntries:
         courseNames.append(chartEntry["courseName"])
         averageGrades.append(chartEntry["averageGrade"])
-
+    '''
     plt.rcdefaults()
     plt.rcParams["figure.figsize"] = (8, 3 * len(courseNames) / 10)
     plt.rcParams.update({'font.size': 8})
@@ -96,8 +93,12 @@ def show_general():
     figfile = BytesIO()
     plt.savefig(figfile, format='png')
     figdata_png = base64.b64encode(figfile.getvalue())
-    
+    '''
     try:
-        return render_template('general.html', answerCount=answerCount, aibCount=aibCount, impactCount=impactCount, chartEntries=chartEntries, figdata_png = figdata_png.decode('utf8'))
+        return render_template('general.html', answerCount=answerCount, aibCount=aibCount, impactCount=impactCount, 
+            chartEntries=chartEntries,
+            #figdata_png = figdata_png.decode('utf8'),
+            figdata_png = ""
+            )
     except exceptions.TemplateSyntaxError as ex:
         return "Template error: " + ex.filename + " on line " + str(ex.lineno)
