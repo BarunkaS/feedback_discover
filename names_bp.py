@@ -23,10 +23,10 @@ def show():
     # Získá připojení na databázi
     # Pošle databázi "SELECT ..." SQL dotaz a výsledek uloží do proměnné cur
     cur = get_db().cursor()
-    cur.execute('SELECT idAgendaItem, name FROM Feedback_Discover.AgendaItem where item_type = \'C\' ORDER BY name')
+    cur.execute('SELECT idAgendaItem, name FROM AgendaItem where item_type = \'C\' ORDER BY name')
     # Načte všechny řádky z výsledku toho SQL dotazu a uloží je do proměnné entries
     entries = cur.fetchall()
-    cur.execute('SELECT idAgendaItem, name FROM Feedback_Discover.AgendaItem WHERE item_type = \'TW\' ORDER BY name')
+    cur.execute('SELECT idAgendaItem, name FROM AgendaItem WHERE item_type = \'TW\' ORDER BY name')
     workshops = cur.fetchall()
 
     # Pro každý řádek z výsledku udělej...
@@ -53,7 +53,7 @@ def course_fdbk(id):
     # Prumerna znamka za kurz
     cur = get_db().cursor()
     gradesQuestionId = 49
-    cur.execute(("SELECT Answer FROM Feedback_Discover.Answer "
+    cur.execute(("SELECT Answer FROM Answer "
                  "join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock "
                  "join AgendaItem on AgendaItem.idAgendaItem = AgendaItemBlock.agenda_item_AiB_id "
                  "where question_id = %s AND idAgendaItem = %s"), (gradesQuestionId, id))
@@ -67,10 +67,10 @@ def course_fdbk(id):
 
     # Impact ANO/NE
     impactQuestionId = 50
-    cur.execute(("SELECT count(Answer) FROM Feedback_Discover.Answer join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock join AgendaItem on AgendaItem.idAgendaItem = AgendaItemBlock.agenda_item_AiB_id where question_id = %s AND idAgendaItem = %s AND answer = 'Ano'"), (impactQuestionId, id))
+    cur.execute(("SELECT count(Answer) FROM Answer join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock join AgendaItem on AgendaItem.idAgendaItem = AgendaItemBlock.agenda_item_AiB_id where question_id = %s AND idAgendaItem = %s AND answer = 'Ano'"), (impactQuestionId, id))
     impactAnoCount = cur.fetchone()[0]
 
-    cur.execute(("SELECT count(Answer) FROM Feedback_Discover.Answer join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock join AgendaItem on AgendaItem.idAgendaItem = AgendaItemBlock.agenda_item_AiB_id where question_id = %s AND idAgendaItem = %s AND answer = 'Ne'"), (impactQuestionId, id))
+    cur.execute(("SELECT count(Answer) FROM Answer join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock join AgendaItem on AgendaItem.idAgendaItem = AgendaItemBlock.agenda_item_AiB_id where question_id = %s AND idAgendaItem = %s AND answer = 'Ne'"), (impactQuestionId, id))
     impactNeCount = cur.fetchone()[0]
 
     #Otazky se skalama
@@ -82,7 +82,7 @@ def course_fdbk(id):
         cur.execute("SELECT idQuestion, question_cz, question_en FROM Question where idQuestion = %s", (i,))
         questionText = cur.fetchone()
 
-        cur.execute("SELECT Answer, count(Answer) from Feedback_Discover.Answer join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock join AgendaItem on AgendaItem.idAgendaItem = AgendaItemBlock.agenda_item_AiB_id where question_id = %s and idAgendaItem = %s group by Answer order by Answer" , (i,id))
+        cur.execute("SELECT Answer, count(Answer) from Answer join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock join AgendaItem on AgendaItem.idAgendaItem = AgendaItemBlock.agenda_item_AiB_id where question_id = %s and idAgendaItem = %s group by Answer order by Answer" , (i,id))
         answers = []
         maxAnswersPerQuestion = 6
 
@@ -102,7 +102,7 @@ def course_fdbk(id):
         cur.execute("SELECT question_cz, question_en FROM Question where idQuestion = %s", (i,))
         questionText = cur.fetchone() 
 
-        cur.execute(("SELECT Answer from Feedback_Discover.Answer join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock join AgendaItem on AgendaItem.idAgendaItem = AgendaItemBlock.agenda_item_AiB_id where question_id = %s AND idAgendaItem = %s;"), (i, id))
+        cur.execute(("SELECT Answer from Answer join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock join AgendaItem on AgendaItem.idAgendaItem = AgendaItemBlock.agenda_item_AiB_id where question_id = %s AND idAgendaItem = %s;"), (i, id))
         commentsPrint = cur.fetchall()
         answers = []
 
@@ -112,7 +112,7 @@ def course_fdbk(id):
         questionData.append({"id": i, "question_cz": questionText[0], "question_en": questionText[1], "answers": answers})
        
 
-    cur.execute("SELECT * FROM Feedback_discover.AgendaItem WHERE idAgendaItem = %s",(id,))
+    cur.execute("SELECT * FROM AgendaItem WHERE idAgendaItem = %s",(id,))
     courseName = cur.fetchone()[1]
 
     # 

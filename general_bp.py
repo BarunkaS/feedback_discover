@@ -20,15 +20,15 @@ blueprint = Blueprint('general_bp', __name__)
 def show_general():
     
     cur = get_db().cursor()
-    cur.execute('SELECT count(Answer) FROM Feedback_Discover.Answer where question_id = 2')
+    cur.execute('SELECT count(Answer) FROM Answer where question_id = 2')
     answerCount = cur.fetchone()[0]
 
     cur = get_db().cursor()
-    cur.execute('SELECT count(idAgendaItemBlock) FROM Feedback_Discover.AgendaItemBlock')
+    cur.execute('SELECT count(idAgendaItemBlock) FROM AgendaItemBlock')
     aibCount = cur.fetchone()[0]
 
     cur = get_db().cursor()
-    cur.execute('SELECT count(Answer) FROM Feedback_Discover.Answer where question_id = 2 and answer = \'Ano\' ')
+    cur.execute('SELECT count(Answer) FROM Answer where question_id = 2 and answer = \'Ano\' ')
     impactCount = cur.fetchone()[0]
 
     #data pro graf známek
@@ -36,7 +36,7 @@ def show_general():
     scaleDataGraph = []
 
     cur = get_db().cursor()
-    cur.execute('SELECT idAgendaItem, `name`, size FROM Feedback_Discover.AgendaItem where item_type = \'C\'')
+    cur.execute('SELECT idAgendaItem, `name`, size FROM AgendaItem where item_type = \'C\'')
 
     courses = cur.fetchall()
 
@@ -44,7 +44,7 @@ def show_general():
     chartEntries = []
 
     for course in courses:
-        cur.execute(("SELECT answer FROM Feedback_Discover.Answer "
+        cur.execute(("SELECT answer FROM Answer "
                  "join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock "
                  "join AgendaItem on AgendaItem.idAgendaItem = AgendaItemBlock.agenda_item_AiB_id "
                  "where question_id = %s AND idAgendaItem = %s"), (gradesQuestionId, course[0]))
