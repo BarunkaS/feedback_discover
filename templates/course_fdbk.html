@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="main-container">
+    <div class="row">
+        <h1> Discover 2017 feedback - {{courseName}}</h1>
+        <div class="col-lg-4 metrics-container">
+                <div class="row col-lg-12" style="background-color:#00c0ef">
+                    <div class="col-lg-9">
+                        <span style="font-size:26px;">{{'%0.2f'| format(grade|float)}}</span>
+                    </div>
+                    <div class="col-lg-3" style="text-align:right;">
+                        <i class="fa fa-balance-scale fa-4" style="font-size: 35px;"></i>
+                    </div>
+                    <div class="clearfix"></div>
+                    <p style="font-weight:bold;">Průměrná známka za kurz</p>                    
+                </div>    
+            </div>
+            <div class="col-lg-4 metrics-container">
+                    <div class="row col-lg-12" style="background-color:#00a65a">
+                        <div class="col-lg-9">
+                            <span style="font-size:26px;">{{impactAnoCount}}</span>
+                        </div>
+                        <div class="col-lg-3" style="text-align:right;">
+                            <i class="fa fa-thumbs-up fa-4" style="font-size: 35px;"></i>
+                        </div>
+                        <div class="clearfix"></div>
+                                <p style="font-weight:bold;">Změněných pohledů</p>                         
+                    </div>    
+            </div>
+            <div class="col-lg-4 metrics-container">
+                    <div class="row col-lg-12" style="background-color:#f39c12">
+                        <div class="col-lg-9">
+                            <span style="font-size:26px;">{{impactNeCount}}</span>
+                        </div>
+                        <div class="col-lg-3" style="text-align:right;">
+                            <i class="fa fa-thumbs-down fa-4" style="font-size: 35px;"></i>
+                        </div>
+                        <div class="clearfix"></div>
+                            <p style="font-weight:bold;">Studentů, kteří se necítili ovlivněni kurzem</p>                                        
+                    </div>    
+                </div>
+    
+        <div class="clearfix"></div>
+        <div class="answers">
+                      
+            {% for x in scaleData %}
+                <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4>{{x.question_cz}}</h4>
+                            ({{x.question_en}})
+                        </div>
+                       
+                        <div class="panel-body" style="padding: 0;">
+                                <table class="table table-bordered" style="text-align:center; margin-bottom: 0;">
+                                        <tr>
+                                            {% for q in x.answers %}
+                                                <td style="width: 16%;">{{q.value}}</td>                    
+                                            {% endfor %}
+                                        </tr>
+                                        <tr>
+                                                {% for q in x.answers %}
+                                                <td>
+                                                    {% if x.question_id == 55 or x.question_id == 56 %}
+                                                        {% if q.answer == 0 %} Netýká se mě/Nevím {% endif %}
+                                                        {% if q.answer == 1 %} Velmi lehké {% endif %}
+                                                        {% if q.answer == 2 %} Spíše lehké {% endif %}
+                                                        {% if q.answer == 3 %} Vhodně náročné {% endif %}
+                                                        {% if q.answer == 4 %} Spíše těžké {% endif %}
+                                                        {% if q.answer == 5 %} Velmi těžké {% endif %}
+                                                    {% else %}
+                                                        {% if q.answer == 0 %} Netýká se mě/Nevím {% endif %}
+                                                        {% if q.answer == 1 %} Určitě ano {% endif %}
+                                                        {% if q.answer == 2 %} Spíše ano {% endif %}
+                                                        {% if q.answer == 3 %} Nevím {% endif %}
+                                                        {% if q.answer == 4 %} Spíše ne {% endif %}
+                                                        {% if q.answer == 5 %} Určitě ne {% endif %}
+                                                    {% endif %}
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                        
+                                </table>                        
+                        </div>
+                    </div>
+
+            {% endfor %}
+
+        {% for c in questionData %}
+            <h4>{{c.question_cz}}</h4>
+                ({{c.question_en}})<br>
+                {% for d in c.answers %}
+                <blockquote>
+                    <p style="font-size:15px;">
+                        {{d.answer}}
+                    </p>
+                </blockquote>
+                {% endfor %}
+            {% endfor %} 
+        </div>
+    </div>
+</div>
+{% endblock %}

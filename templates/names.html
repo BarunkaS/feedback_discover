@@ -1,0 +1,71 @@
+<!-- Tohle je komentář v HTML. Prohlížeč ho ignoruje, ale Flask ne. Proto nemůžu
+     v komentářích používat kombinaci složená závorka-procento, protože Flask se
+     to snaží pochopit, i když je to jenom komentář. Proto v komentářích používám
+     {$ a $}, které Flask nezná, takže mu nevadí. Jenom si představ, že místo "$"
+     je tam "%" :) //-->
+
+
+<!-- {$ extends $} říká Flasku, že tato šablona rozšiřuje šablonu layout.html
+     Tohle je hodně užitečné, když máš vícero stránek, které mají stejnou hlavičku
+     a strukturu a liší se jenom v jedné části (třeba v hlavním obsahu) a nechceš
+     pokaždý tu hlavičku opakovat ve všech šablonách //-->
+{% extends "layout.html" %}
+<!-- Řekne flasku, že tedy začíná blok body - Flask vezme to, co je tedy mezi touhle
+     značkou a značkou {$ endblock $} a vloží to na stejně označené místo v layout.html
+//-->
+{% block body %}
+<div class="main-container">
+    <div class="row">
+        <div class="col-lg-12">
+                <h1>Discover feedback 2017</h1>            
+        </div>        
+        <div class="col-lg-6">
+            <table class="table table-hover table-bordered table-hover">
+                <!-- Začátek prvního řádku tabulky //-->
+                <tr>
+                    <!-- První sloupeček prvního řádku tabulky //-->
+                    <th>Kurz</th>
+                <!-- Konec prvního řádku tabulky //-->
+                </tr>
+                <!-- {$ for entry in names $} je intrukce pro Flask, aby celý blok mezi
+                    tímto příkazem a příkazem {$ endfor $} zopakoval pro každý záznam
+                    v seznamu "names" - to je ten seznam záznamů, který jsme ve funkci
+                    show() v names_bp.py načetli z databázi promocí SQL a předali
+                    Flasku do funkce render_template(), které jsme řekli, aby použila
+                    tuto šablonu. //-->
+                {% for entry in names %}
+                <!-- Začátek nové řádky//-->
+                <tr>
+                    <!-- První sloupec - {{ a }} říká Flasku aby tuto značku nahradil
+                        za to, co je v proměnné entry pod klíčem name (klíč "name" odpovidá
+                        názvu sloupečku "name" z naší SQL tabulky, protože odtamtud
+                        jsme tyhle záznamy získali) //-->
+                    <td><a href="/course_fdbk/{{entry[0]}}">{{ entry[1] }}</a></td>
+                
+                    </td>
+                <!-- Konec nového řádku //-->
+                </tr>
+                <!-- Konec opakování //-->
+                {% endfor %}
+            <!-- Konec tabulky //-->
+            </table>
+        </div>
+        <div class="col-lg-6">
+            <table class="table table-hover table-bordered table-hover">
+                <tr>
+                    <th>Týmové workshopy</th>
+                </tr>
+                <tr>
+                        <th>Feedback o týmových workshopech bude zde již brzy.</th>
+                </tr>
+                {%for workshop in workshops%}
+                <tr>
+                        <td><a href="/TW_fdbk/{{workshop[0]}}">{{ workshop[1] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Konec bloku body //-->
+{% endblock %}

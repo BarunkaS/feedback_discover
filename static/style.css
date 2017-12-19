@@ -1,0 +1,30 @@
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+.main-container {
+    margin-top: 55px;
+}
+
+.main-container h1 {
+    color: #3F51B5;
+}
+
+.metrics-container {
+    color: white;
+}
+
+.answers {
+    margin-top: 25px;
+}
+
+blockquote {
+    background: #f9f9f9;
+    border-left: 5px solid #ccc;
+    margin: 10px;
+    padding: 5px;
+    quotes: "\201C""\201D""\2018""\2019";
+  }
+  blockquote p {
+    display: inline;
+  }
+  
