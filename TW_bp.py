@@ -5,11 +5,8 @@ from jinja2 import exceptions
 
 import MySQLdb
 import numpy
-
+from utils import get_db 
 # Vytvoří nový blueprint s názvem "TW_bp" a uloží ho to proměnné blueprint
 blueprint = Blueprint('TW_bp', __name__)
-db = MySQLdb.connect("localhost", "root", "Bluepurse22", "Feedback_Discover", use_unicode = True)
-db.set_character_set("utf8")
-db.cursor().execute("SET CHARACTER SET utf8")
 
-@blueprint.route('/TW_fdbk')
+

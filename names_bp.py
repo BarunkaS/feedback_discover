@@ -7,12 +7,13 @@ import numpy
 # Z flasku naimportuje spoustu různých funkcí, které budeme potřebovat
 from flask import Blueprint, request, g, url_for, render_template, redirect
 from jinja2 import exceptions
-
+from utils import get_db 
 # Vytvoří nový blueprint s názvem "names_bp" a uloží ho to proměnné blueprint
 blueprint = Blueprint('names_bp', __name__)
-db = MySQLdb.connect("localhost", "root", "Bluepurse22", "Feedback_Discover", use_unicode = True)
-db.set_character_set("utf8")
-db.cursor().execute("SET CHARACTER SET utf8")
+
+
+
+
 # Pomocná funkce, která se připojí k databázi, pokud je potřeba a vrátí nám
 # jako výsledek objekt, který obsahuje ono spojení, nad kterém potom můžeme
 # spouštět SQL dotazy
@@ -22,7 +23,7 @@ db.cursor().execute("SET CHARACTER SET utf8")
 def show():
     # Získá připojení na databázi
     # Pošle databázi "SELECT ..." SQL dotaz a výsledek uloží do proměnné cur
-    cur = db.cursor()
+    cur = get_db().cursor()
     cur.execute('SELECT idAgendaItem, name FROM Feedback_Discover.AgendaItem where item_type = \'C\' ORDER BY name')
     # Načte všechny řádky z výsledku toho SQL dotazu a uloží je do proměnné entries
     entries = cur.fetchall()
@@ -51,7 +52,7 @@ def show():
 @blueprint.route('/course_fdbk/<id>')
 def course_fdbk(id):
     # Prumerna znamka za kurz
-    cur = db.cursor()
+    cur = get_db().cursor()
     gradesQuestionId = 49
     cur.execute(("SELECT Answer FROM Feedback_Discover.Answer "
                  "join AgendaItemBlock on Answer.agenda_item_block_id = AgendaItemBlock.idAgendaItemBlock "

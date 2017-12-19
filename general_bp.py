@@ -1,36 +1,36 @@
 from flask import Flask
 from flask import current_app as app
-from flask import Blueprint, request, g, url_for, render_template, redirect
+from flask import Blueprint, request, url_for, render_template, redirect
 from jinja2 import exceptions
 from io import BytesIO
 import base64
+import os
 
-import MySQLdb
 import numpy 
 
 import matplotlib.pyplot as plt
 
+from utils import get_db 
+
 
 # Vytvoří nový blueprint s názvem "general_bp" a uloží ho to proměnné blueprint
 blueprint = Blueprint('general_bp', __name__)
-db = MySQLdb.connect("localhost", "root", "Bluepurse22", "Feedback_Discover", use_unicode = True)
-db.set_character_set("utf8")
-db.cursor().execute("SET CHARACTER SET utf8")
+
 
 # Zaregistruje funkci show_general() jako funkci, kterou má Flask zavolat, když 
 # uživatel otevře v prohlížeči stránku "/general"
 @blueprint.route('/general')
 def show_general():
     
-    cur = db.cursor()
+    cur = get_db().cursor()
     cur.execute('SELECT count(Answer) FROM Feedback_Discover.Answer where question_id = 2')
     answerCount = cur.fetchone()[0]
 
-    cur = db.cursor()
+    cur = get_db().cursor()
     cur.execute('SELECT count(idAgendaItemBlock) FROM Feedback_Discover.AgendaItemBlock')
     aibCount = cur.fetchone()[0]
 
-    cur = db.cursor()
+    cur = get_db().cursor()
     cur.execute('SELECT count(Answer) FROM Feedback_Discover.Answer where question_id = 2 and answer = \'Ano\' ')
     impactCount = cur.fetchone()[0]
 
@@ -38,7 +38,7 @@ def show_general():
     listCourses = []
     scaleDataGraph = []
 
-    cur = db.cursor()
+    cur = get_db().cursor()
     cur.execute('SELECT idAgendaItem, `name`, size FROM Feedback_Discover.AgendaItem where item_type = \'C\'')
 
     courses = cur.fetchall()

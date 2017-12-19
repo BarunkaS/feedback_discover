@@ -10,13 +10,14 @@ from flask_mysqldb import MySQL
 
 # Vytvoří novou Flask aplikaci a uloží ji do proměnné "DiscoverApp"
 DiscoverApp = Flask(__name__)
-DiscoverApp.config['MYSQL_HOST'] = 'localhost'
-DiscoverApp.config['MYSQL_USER'] = 'root'
-DiscoverApp.config['MYSQL_PASSWORD'] = 'Bluepurse22'
-DiscoverApp.config['MYSQL_DB'] = 'Feedback_Discover'
-DiscoverApp.config['MYSQL_CHARSET'] = 'Utf-8'
+
 # Zaregistruje blueprint z names_bp do naší Flask aplikace - names_bp.blueprint
 # odkazuje na proměnnou "blueprint", kterou jsme vytvořili v names_bp.py
 DiscoverApp.register_blueprint(names_bp.blueprint)
 # Stejně tak zaregistrujeme general_bp blueprint
 DiscoverApp.register_blueprint(general_bp.blueprint)
+
+@DiscoverApp.teardown_appcontext
+def close_db():
+    if hasattr(g, "mysql"):
+        g.mysql.close()
